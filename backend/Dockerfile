@@ -17,7 +17,7 @@ RUN pip install -r requirements.txt --no-cache-dir
 COPY . .
 
 # Создание пользователя
-RUN adduser -D -s /bin/sh appuser && \
+RUN adduser -D -s /bin/sh -u 2000 appuser  && \
     mkdir -p /app/collected_static /app/media && \
     chown -R appuser:appuser /app
 
@@ -25,4 +25,4 @@ RUN adduser -D -s /bin/sh appuser && \
 USER appuser
 
 # Запуск сервиса
-CMD ["sh","-c","python manage.py collectstatic --noinput && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+CMD ["sh","-c","python manage.py collectstatic --noinput && python manage.py migrate && python manage.py createsuperuser --noinput || true && python manage.py runserver 0.0.0.0:8000"]

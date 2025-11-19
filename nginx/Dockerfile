@@ -1,4 +1,7 @@
 FROM nginx:alpine
+
+WORKDIR /app
+
 COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 EXPOSE 80

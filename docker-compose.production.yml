@@ -16,7 +16,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: kittygram_backend
+    image: ${DOCKER_USERNAME/kittygram_backend:latest
     container_name: backend
     restart: always
     volumes:
@@ -31,9 +31,6 @@ services:
       - DEBUG=${DEBUG}
       - SECRET_KEY=${SECRET_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
-      - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
-      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
     depends_on:
       - db
     networks:
@@ -43,10 +40,10 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: kittygram_frontend
+    image: ${DOCKER_USERNAME}/kittygram_frontend:latest
     container_name: frontend
     volumes:
-      - static:/app/build/static
+      - static:/app/static
     restart: always
     depends_on:
       - backend

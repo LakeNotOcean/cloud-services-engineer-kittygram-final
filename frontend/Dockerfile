@@ -6,7 +6,7 @@ COPY package.json package.json
 COPY package-lock.json package-lock.json
 COPY . .
 
-RUN adduser -D -s /bin/sh appuser && chown -R appuser:appuser /app
+RUN adduser -D -s /bin/sh -u 2000 appuser && chown -R appuser:appuser /app
 USER appuser
 
 RUN npm ci
