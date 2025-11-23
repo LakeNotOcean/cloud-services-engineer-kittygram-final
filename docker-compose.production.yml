@@ -13,9 +13,6 @@ services:
     networks:
       - kittygram_network
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
     image: ${DOCKER_USERNAME}/kittygram_backend:latest
     container_name: backend
     restart: always
@@ -37,13 +34,10 @@ services:
       - kittygram_network
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
     image: ${DOCKER_USERNAME}/kittygram_frontend:latest
     container_name: frontend
     volumes:
-      - static:/app/static
+      - static:/app/build/static
     restart: always
     depends_on:
       - backend
@@ -51,9 +45,6 @@ services:
       - kittygram_network
 
   gateway:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
     image: ${DOCKER_USERNAME}/kittygram_gateway:latest
     container_name: gateway
     ports:
