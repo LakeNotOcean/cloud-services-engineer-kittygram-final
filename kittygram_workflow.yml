@@ -146,6 +146,13 @@ jobs:
             dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
             EOF
       
+        - name: Wait for application to be ready
+          run: |
+            echo "Waiting for application to start..."
+            timeout 180 bash -c 'until curl -f -s ${{ secrets.KITTYGRAM_DOMAIN }} > /dev/null; do sleep 10; done'
+            echo "Application is ready!"
+            sleep 10
+
         - name: Run tests
           run: |
             pytest tests/ -v
@@ -177,3 +184,4 @@ jobs:
               - Push Docker: ${{ needs.push-docker-images.result }}
               - Deploy: ${{ needs.deploy.result }}
               - Auto Tests: ${{ needs.auto_tests.result }}
+          
