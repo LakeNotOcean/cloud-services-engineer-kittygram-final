@@ -4,7 +4,7 @@ FROM python:3.14-alpine
 RUN apk add --no-cache \
     py3-setuptools 
 
-# Директория приложения
+# Директория сервиса
 WORKDIR /app
 
 # Копирование списка зависимостей
