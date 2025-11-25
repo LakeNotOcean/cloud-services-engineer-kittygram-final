@@ -24,5 +24,7 @@ RUN adduser -D -s /bin/sh -u 2000 appuser  && \
 # Переключение на пользователя
 USER appuser
 
-# Запуск сервиса
-CMD ["sh","-c","python manage.py collectstatic --noinput && python manage.py migrate && python manage.py createsuperuser --noinput || true && python manage.py runserver 0.0.0.0:8000"]
+# Запуск сервиса (без применения миграции и сбора статистики)
+CMD ["sh","-c","\
+    python manage.py createsuperuser --noinput || true && \
+    gunicorn -c gunicorn.conf.py kittygram_backend.wsgi:application"]
