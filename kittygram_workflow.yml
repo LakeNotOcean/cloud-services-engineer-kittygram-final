@@ -10,6 +10,7 @@ on:
 
 
 jobs:
+  # статический анализ кода backend-сервиса
     tests:
         runs-on: ubuntu-latest
         steps:
@@ -27,7 +28,7 @@ jobs:
             - name: Run flake8
               run: python -m flake8 backend/
 
-
+    # обновление docker-образов
     push-docker-images:
         runs-on: ubuntu-latest
         needs:
@@ -68,7 +69,8 @@ jobs:
                 file: ./nginx/Dockerfile
                 push: true
                 tags: ${{ secrets.DOCKER_USERNAME }}/kittygram_gateway:latest
-              
+        
+    # развертывание приложения на удаленном сервере
     deploy:
       runs-on: ubuntu-latest
       needs:
@@ -124,6 +126,8 @@ jobs:
               # дополнительно выполяем миграции и сбор статистики
               docker compose -f docker-compose.production.yml exec backend python manage.py migrate && \
               docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic --noinput
+
+    # запуск автотестов приложения
     auto-tests:
       runs-on: ubuntu-latest
       needs: deploy
@@ -160,7 +164,7 @@ jobs:
           run: |
             pytest tests/ -v
 
-
+    # уведомление в чат-боте Телеграма
     telegram-notify:
       runs-on: ubuntu-latest
       if: always()
