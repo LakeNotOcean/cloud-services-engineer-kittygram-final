@@ -25,4 +25,6 @@ RUN adduser -D -s /bin/sh -u 2000 appuser  && \
 USER appuser
 
 # Запуск сервиса (без применения миграции и сбора статистики)
-CMD ["sh","-c","python manage.py createsuperuser --noinput || true && gunicorn -c gunicorn.conf.py kittygram_backend.wsgi:application"]
+CMD ["sh","-c","\
+    python manage.py createsuperuser --noinput || true && \
+    gunicorn -c gunicorn.conf.py kittygram_backend.wsgi:application"]
