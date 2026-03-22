@@ -1,0 +1,50 @@
+name: Terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Select the Terraform action'
+        required: true
+        default: 'plan'
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+
+jobs:
+  terraform:
+    name: 'Terraform ${{ github.event.inputs.action }}'
+    runs-on: ubuntu-latest
+    env:
+      ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.7
+
+      - name: Terraform init
+        working-directory: ./infra
+        run: terraform init -backend-config="access_key=$ACCESS_KEY" -backend-config="secret_key=$SECRET_KEY"
+
+      - name: Terraform Plan
+        working-directory: ./infra
+        if: ${{ github.event.inputs.action == 'plan' }}
+        run: terraform plan
+
+      - name: Terraform Apply
+        working-directory: ./infra
+        if: ${{ github.event.inputs.action == 'apply' }}
+        run: terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        working-directory: ./infra
+        if: ${{ github.event.inputs.action == 'destroy' }}
+        run: terraform destroy -auto-approve
