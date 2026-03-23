@@ -23,10 +23,6 @@ iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 # Создаём правило для отслеживания новых SSH-соединений
 iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -m recent --set
 
-# Блокируем IP-адреса, с которых идёт больше 20 попыток подключения в минуту
-iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -m recent \
-         --update --seconds 60 --hitcount 20 -j DROP
-
 # Разрешаем SSH-подключения, прошедшие проверку на частоту
 iptables -A INPUT -p tcp --dport 22 -j ACCEPT
 
