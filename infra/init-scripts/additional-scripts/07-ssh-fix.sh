@@ -37,4 +37,4 @@ Protocol 2
 EOF
 
 # Перезапуск SSH-сервера
-systemctl restart sshd
+systemctl restart ssh || systemctl restart sshd
