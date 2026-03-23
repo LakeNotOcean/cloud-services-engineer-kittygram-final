@@ -31,8 +31,12 @@ REPO_OWNER=LakeNotOcean
 KITTYGRAM_DOMAIN=localhost:80
 
 # Terraform GitHub Actions secrets only
-TF_CATALOG_NAME=practicum-catalog
-TF_FOLDER_ID=b1garkekedasda
-TF_IMAGE_ID=fd8fpk9lkplfjrc5s2gg
-TF_VM_USER=user
-TF_ZONE=ru-central1-a
+YC_ACCESS_KEY=kmfsfdml
+YC_SECRET_KEY=dasdad
+YC_CATALOG_NAME=practicum-catalog
+YC_FOLDER_ID=b1garkekedasda
+YC_CLOUD_ID=dadfk2wndasd
+YC_SERVICE_ACCOUNT_KEY=json-file
+YC_IMAGE_ID=fd8fpk9lkplfjrc5s2gg
+YC_VM_USER=user
+YC_ZONE=ru-central1-a

@@ -21,12 +21,23 @@ jobs:
       run:
         working-directory: ./infra
     env:
-      ACCESS_KEY: ${{ secrets.CA_ACCESS_KEY }}
-      SECRET_KEY: ${{ secrets.CA_SECRET_KEY }}
+      ACCESS_KEY: ${{ secrets.YC_ACCESS_KEY }}
+      SECRET_KEY: ${{ secrets.YC_SECRET_KEY }}
+      YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
+      YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
+      YC_SERVICE_ACCOUNT_KEY_FILE: ./yc_key.json
+    
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setup YC
+        run: curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+
+      - name: Create YC service account key file
+        run: |
+          echo "${{ secrets.YC_SERVICE_ACCOUNT_KEY }}" > $YC_SERVICE_ACCOUNT_KEY_FILE
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -53,14 +64,14 @@ jobs:
       - name: Create environment file
         run: |
           cat > terraform.tfvars << EOF
-          zone           = "${{secrets.TF_ZONE }}"
-          folder_id      = "${{secrets.TF_FOLDER_ID }}"
-          catalog_name   = "${{secrets.TF_CATALOG_NAME }}"
-          image_id       = "${{secrets.TF_IMAGE_ID }}"
+          zone           = "${{secrets.YC_ZONE }}"
+          folder_id      = "${{secrets.YC_FOLDER_ID }}"
+          catalog_name   = "${{secrets.YC_CATALOG_NAME }}"
+          image_id       = "${{secrets.YC_IMAGE_ID }}"
           ssh_public_key = <<-EOT
           ${{ secrets.PUBLIC_SSH_KEY }}
           EOT
-          vm_user        = "${{secrets.TF_VM_USER }}"
+          vm_user        = "${{secrets.YC_VM_USER }}"
           EOF
 
       - name: Terraform init
