@@ -32,12 +32,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup YC
-        run: curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-
       - name: Create YC service account key file
         run: |
-          echo "${{ secrets.YC_SERVICE_ACCOUNT_KEY }}" > $YC_SERVICE_ACCOUNT_KEY_FILE
+          cat > $YC_SERVICE_ACCOUNT_KEY_FILE << 'EOF'
+          ${{ secrets.YC_SERVICE_ACCOUNT_KEY }}
+          EOF
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
