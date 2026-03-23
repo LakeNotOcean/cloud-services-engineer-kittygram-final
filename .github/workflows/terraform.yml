@@ -55,9 +55,11 @@ jobs:
           cat > terraform.tfvars << EOF
           zone           = "${{secrets.TF_ZONE }}"
           folder_id      = "${{secrets.TF_FOLDER_ID }}"
-          catalog_name   = "${{secrets.TF_CATALOG_NAME }}""
+          catalog_name   = "${{secrets.TF_CATALOG_NAME }}"
           image_id       = "${{secrets.TF_IMAGE_ID }}"
-          ssh_public_key = "${{secrets.PUBLIC_SSH_KEY }}"
+          ssh_public_key = <<-EOT
+          ${{ secrets.PUBLIC_SSH_KEY }}
+          EOT
           vm_user        = "${{secrets.TF_VM_USER }}"
           EOF
 
