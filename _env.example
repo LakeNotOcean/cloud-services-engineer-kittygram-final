@@ -16,12 +16,12 @@ DJANGO_SUPERUSER_PASSWORD=admin-password
 # Docker
 DOCKER_USERNAME=name
 
-#GitHub Actions secrets only
+# GitHub Actions secrets only
 DOCKER_TOKEN=token
 
 DEPLOY_HOST=host
 DEPLOY_USER=user
-DEPLOY_SSH_KEY=key
+PUBLIC_SSH_KEY=key
 DEPLOY_SSH_PASSPHRASE=pass
 
 TELEGRAM_TO=user
@@ -29,3 +29,10 @@ TELEGRAM_TOKEN=token
 
 REPO_OWNER=LakeNotOcean
 KITTYGRAM_DOMAIN=localhost:80
+
+# Terraform GitHub Actions secrets only
+TF_CATALOG_NAME=practicum-catalog
+TF_FOLDER_ID=b1garkekedasda
+TF_IMAGE_ID=fd8fpk9lkplfjrc5s2gg
+TF_VM_USER=user
+TF_ZONE=ru-central1-a

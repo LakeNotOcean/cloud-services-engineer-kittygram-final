@@ -17,9 +17,12 @@ jobs:
   terraform:
     name: 'Terraform ${{ github.event.inputs.action }}'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infra
     env:
-      ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      ACCESS_KEY: ${{ secrets.CA_ACCESS_KEY }}
+      SECRET_KEY: ${{ secrets.CA_SECRET_KEY }}
 
     steps:
       - name: Checkout code
@@ -29,22 +32,27 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.9.7
+      - name: Create environment file
+        run: |
+          cat > terraform.tfvars << EOF
+          zone           = ${{secrets.TF_ZONE }}
+          folder_id      = ${{secrets.TF_FOLDER_ID }}
+          catalog_name   = ${{secrets.TF_CATALOG_NAME }}
+          image_id       = ${{secrets.TF_IMAGE_ID }}
+          ssh_public_key = ${{secrets.PUBLIC_SSH_KEY }}
+          vm_user        = ${{secrets.TF_VM_USER }}
 
       - name: Terraform init
-        working-directory: ./infra
         run: terraform init -backend-config="access_key=$ACCESS_KEY" -backend-config="secret_key=$SECRET_KEY"
 
       - name: Terraform Plan
-        working-directory: ./infra
         if: ${{ github.event.inputs.action == 'plan' }}
         run: terraform plan
 
       - name: Terraform Apply
-        working-directory: ./infra
         if: ${{ github.event.inputs.action == 'apply' }}
         run: terraform apply -auto-approve
 
       - name: Terraform Destroy
-        working-directory: ./infra
         if: ${{ github.event.inputs.action == 'destroy' }}
         run: terraform destroy -auto-approve
