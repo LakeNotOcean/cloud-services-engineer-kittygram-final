@@ -32,6 +32,21 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.9.7
+       
+      - name: Configure Terraform CLI
+        run: |
+          cat > ~/.terraformrc << EOF
+          provider_installation {
+            network_mirror {
+              url = "https://terraform-mirror.yandexcloud.net/"
+              include = ["registry.terraform.io/*/*"]
+            }
+            direct {
+              exclude = ["registry.terraform.io/*/*"]
+            }
+          }
+          EOF 
+              
       - name: Create environment file
         run: |
           cat > terraform.tfvars << EOF
